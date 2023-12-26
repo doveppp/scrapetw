@@ -107,6 +107,8 @@ class V2TwitterTweetsScraper(V2Base):
         obj = self._get_api_data(url, _TwitterAPIType.GRAPHQL, params=params, instructionsPath=instructionsPath)
         if not obj["data"]:
             return
+        if 'result' not in obj["data"]["tweetResult"]:
+            return
         return self._graphql_timeline_tweet_item_result_to_tweet(obj["data"]["tweetResult"]["result"], tweetId=tweet_id)
 
 
