@@ -1,12 +1,10 @@
-import json
-import logging
 import re
-from typing import Iterable
+from typing import Union
 import snscrape
-from snscrape.modules.twitter import TwitterTweetScraper, _TwitterAPIType, _TwitterAPIScraper, _logger
+from snscrape.modules.twitter import _TwitterAPIType, _TwitterAPIScraper, _logger, Tweet, TweetRef
 
 _GUEST_TOKEN_VALIDITY = 9000
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 # _logger.setLevel(logging.NOTSET)
 # print(_logger.level)
 
@@ -71,7 +69,7 @@ class V2TwitterTweetsScraper(V2Base):
                 _logger.warning(f"Error scraping {tweet_id}: {e}")
                 continue
 
-    def get_item(self, tweet_id):
+    def get_item(self, tweet_id) -> Union[Tweet, TweetRef, None]:
         paginationVariables = {
             "tweetId": tweet_id,
             "withCommunity": False,
@@ -159,7 +157,9 @@ if __name__ == "__main__":
     #     print("==============")
     #     print(i)
 
-    t = V2TwitterTweetsScraper(["1737324434359202275"] * 2 + ["22222221231232222"])
+    t = V2TwitterTweetsScraper(
+        ["1737324434359202275", "1268179206921281537", "1268179206090960897"]
+    )  # true del suspended, ret :tweet none tweetref
     for i in t.get_items():
         print("==============")
         print(i)
